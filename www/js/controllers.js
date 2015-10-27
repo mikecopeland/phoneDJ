@@ -1,4 +1,21 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['starter.services', 'ngOpenFB'])
+
+.controller('LoginCtrl', function ($scope, $state, $ionicModal, $timeout, ngFB){
+  $scope.fbLogin = function () {
+    ngFB.login({scope: 'email'}).then(
+      function (response) {
+        if (response.status === 'connected') {
+          console.log('Facebook login succeeded');
+          $scope.closeLogin();
+        } else {
+          alert('Facebook login failed');
+        }
+      });
+  };
+  $scope.closeLogin = function(){
+    $state.go('tab.dash');
+  };
+})
 
 .controller('DashCtrl', function($scope) {})
 
