@@ -1,0 +1,23 @@
+<ion-view view-title="Rooms">
+  <ion-content>
+    <button class="button button-icon ion-plus" ng-click="createRoom()">
+      Create Room
+    </button>
+    <ion-list>
+      <ion-item ng-repeat="room in rooms" >
+        <ion-delete-button class="ion-minus-circled"></ion-delete-button>
+        <div class="list card">
+          <div class="item item-divider">{{room.name}}</div>
+          <div class="item item-body">
+            <div>
+              <i>Created by: </i><b>{{room.creator.name}}</b>
+            </div>
+            <div>
+              0 users
+            </div>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

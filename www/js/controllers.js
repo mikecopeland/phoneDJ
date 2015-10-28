@@ -1,8 +1,8 @@
-angular.module('starter.controllers', ['starter.services', 'ngOpenFB'])
+angular.module('phoneDJ.controllers', ['phoneDJ.services', 'ngOpenFB'])
 
-.controller('LoginCtrl', function ($scope, $state, $ionicModal, $timeout, ngFB){
+.controller('LoginController', function ($scope, $state, $ionicModal, $timeout, ngFB, Friends){
   $scope.fbLogin = function () {
-    ngFB.login({scope: 'email'}).then(
+    ngFB.login({scope: 'email, user_friends'}).then(
       function (response) {
         if (response.status === 'connected') {
           console.log('Facebook login succeeded');
@@ -13,13 +13,32 @@ angular.module('starter.controllers', ['starter.services', 'ngOpenFB'])
       });
   };
   $scope.closeLogin = function(){
-    $state.go('tab.dash');
+    $state.go('tab.friends');
+
   };
 })
 
-.controller('DashCtrl', function($scope) {})
+.controller('RoomsController', function($scope, Rooms, FBUser) {
+    $scope.rooms = Rooms;
 
-.controller('ChatsCtrl', function($scope, Chats) {
+    $scope.createRoom = function() {
+      var name = prompt("Room Name");
+      if (name) {
+        console.log(FBUser.get());
+        $scope.rooms.$add({
+          "name": name,
+          "creator": FBUser.get()
+        });
+      }
+    };
+
+    $scope.deleteRoom = function(id, name){
+
+      $scope.rooms.$remove(id);
+    }
+})
+
+.controller('FriendsController', function($scope, friends) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -28,18 +47,17 @@ angular.module('starter.controllers', ['starter.services', 'ngOpenFB'])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
 
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
+  $scope.friends = friends;
+
 })
 
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope) {
+.controller('AccountController', function($scope, user) {
   $scope.settings = {
     enableFriends: true
   };
+  $scope.user = user;
 });

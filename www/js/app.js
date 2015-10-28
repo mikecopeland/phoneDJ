@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngOpenFB'])
+angular.module('phoneDJ', ['ionic', 'phoneDJ.controllers', 'phoneDJ.services', 'ngOpenFB', 'firebase'])
 
 .run(function($ionicPlatform, ngFB) {
   ngFB.init({appId: '1652647074975851'});
@@ -41,22 +41,27 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
       // Each tab has its own nav history stack:
 
-      .state('tab.dash', {
-        url: '/dash',
+      .state('tab.rooms', {
+        url: '/rooms',
         views: {
-          'tab-dash': {
-            templateUrl: 'templates/tab-dash.html',
-            controller: 'DashCtrl'
+          'tab-rooms': {
+            templateUrl: 'templates/tab-rooms.html',
+            controller: 'RoomsController'
           }
         }
       })
 
-      .state('tab.chats', {
-        url: '/chats',
+      .state('tab.friends', {
+        url: '/friends',
         views: {
-          'tab-chats': {
-            templateUrl: 'templates/tab-chats.html',
-            controller: 'ChatsCtrl'
+          'tab-friends': {
+            templateUrl: 'templates/tab-friends.html',
+            controller: 'FriendsController',
+            resolve: {
+              friends: function(Friends) {
+                return Friends.all();
+              }
+            }
           }
         }
       })
@@ -75,7 +80,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         views: {
           'tab-account': {
             templateUrl: 'templates/tab-account.html',
-            controller: 'AccountCtrl'
+            controller: 'AccountController',
+            resolve: {
+              user: function(FBUser) {
+                return FBUser.get();
+              }
+            }
           }
         }
       })
@@ -83,7 +93,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       .state('login', {
         url: '/login',
         templateUrl: 'templates/login.html',
-        controller: 'LoginCtrl'
+        controller: 'LoginController'
       });
 
   // if none of the above states are matched, use this as the fallback

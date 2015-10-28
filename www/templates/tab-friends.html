@@ -1,0 +1,12 @@
+<ion-view view-title="Friends ({{friends.online}}/{{friends.total}})">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends.flist" type="item-text-wrap">
+        <img ng-src="{{friend.picture}}">
+        <h2>{{friend.name}}</h2>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

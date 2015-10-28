@@ -1,4 +1,45 @@
-angular.module('starter.services', [])
+angular.module('phoneDJ.services', ['ngOpenFB'])
+
+.factory('FBUser', function(){
+    var user = {};
+    return {
+      get: function(){
+        openFB.api({path: '/me', params:{fields: ['id','name','picture','email']},
+          success: function(response){
+            user = response;
+          },
+          error : function(){
+            console.log("failed to retrieve user data");
+          }
+        });
+        return user;
+      }
+    };
+})
+
+.factory('Friends', function(){
+  var friends = {flist:[], online:0, total:0};
+    return {
+      all: function() {
+        openFB.api({path: '/me/friends',
+          success: function(response){
+            friends.flist = response.data;
+            friends.online = friends.flist.length;
+            friends.total = response.summary.total_count;
+          },
+          error : function(){
+            console.log("failed to retrieve friends");
+          }
+        });
+        return friends;
+      }
+    };
+})
+
+.factory("Rooms", function($firebaseArray) {
+  var roomsRef = new Firebase("https://fiery-heat-8396.firebaseio.com//rooms");
+  return $firebaseArray(roomsRef);
+})
 
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array
@@ -48,3 +89,5 @@ angular.module('starter.services', [])
     }
   };
 });
+
+
